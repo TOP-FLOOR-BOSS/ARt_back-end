@@ -44,20 +44,28 @@ app.use(cors({
     res.sendFile(path.join (__dirname, "views", "index.html"));
   });
 
+// To get the users
+router.get("/register", (req,res) => {
+  let strQry = `SELECT * FROM users`;
+  db.query(strQry, (err, results)=>{
+    if (err) throw err;
+    res.status(200).json({
+      results: results,
+    });
+  });
+});
 
 
-
-  // User registration
+  // Register
 router.post("/register", bodyParser.json(), (req, res) => {
-    // Retrieving data that was sent by the user
-    // id, firstname, lastname, email, userpassword, usertype
-    let { user_firstname, user_lastname, email, user_password, user_role } = req.body;
-    // If the userRole is null or empty, set it to "user".
+
+    let { user_name, user_lastname, email, user_password, user_role } = req.body;
+
     if (user_role.length === 0) {
       if (user_role.includes() !== "user" || user_role.includes() !== "admin")
         user_role = "user";
     }
-    // Check if a user already exists
+
     let strQry = `SELECT email, user_password
       FROM users
       WHERE LOWER(email) = LOWER('${email}')`;
@@ -69,22 +77,22 @@ router.post("/register", bodyParser.json(), (req, res) => {
           res.status(409).json({ msg: "User already exist" });
         } else {
           // Encrypting a password
-          // Default value of salt is 10.
+
           user_password = await hash(user_password, 10);
-          // Query
+
           strQry = `
-                  INSERT INTO users(user_firstname, user_lastname , email, user_password, user_role)
+                  INSERT INTO users(user_name, user_lastname , email, user_password, user_role)
                   VALUES(?, ?, ?, ?, ?);
                   `;
           db.query(
             strQry,
-            [user_firstname, user_lastname , email, user_password, user_role],
+            [user_name, user_lastname , email, user_password, user_role],
             (err, results) => {
               if (err) throw err;
               res
                 .status(201)
                 .json({
-                  msg: `number of affected row is: ${results.affectedRows}`,
+                  msg: `You have been successfully registered !!!`,
                 });
             }
           );
@@ -92,3 +100,4 @@ router.post("/register", bodyParser.json(), (req, res) => {
       }
     });
   });
+
