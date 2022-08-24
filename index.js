@@ -61,17 +61,19 @@ router.post("/register", bodyParser.json(), (req, res) => {
 
     let { user_name, user_lastname, email, user_password, user_role } = req.body;
 
-    if (user_role.length === 0) {
-      if (user_role.includes() !== "user" || user_role.includes() !== "admin")
-        user_role = "user";
+    if (user_role === null || user_role === undefined) {
+      user_role = "user";
     }
 
     let strQry = `SELECT email, user_password
       FROM users
       WHERE LOWER(email) = LOWER('${email}')`;
     db.query(strQry, async (err, results) => {
-      if (err) throw err;
-         if (results.length) {
+      if(err){
+        throw err;
+      }else {
+        console.log(results);
+        if (results) {
           res.status(409).json({ msg: "User already exist" });
         } else {
           // Encrypting a password
@@ -85,16 +87,17 @@ router.post("/register", bodyParser.json(), (req, res) => {
           db.query(
             strQry,
             [user_name, user_lastname , email, user_password, user_role],
-            (err, results) => {
+            (err) => {
               if (err) throw err;
               res
                 .status(201)
                 .json({
-                  msg: `You have been successfully registered !!!`,
+                  msg: `You have been successfully registered !!!`
                 });
             }
           );
         }
+      } 
     });
   });
 
