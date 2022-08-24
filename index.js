@@ -16,16 +16,7 @@ app.use(cors({
     origin: ['http://localhost:8080', 'http://127.0.0.1:8080'],
     credentials: true
   }))
-  // app.use((req, res, next) => {
-  //   // res.setHeader("Access-Control-Allow-Origin", "*");
-  //   res.set({
-  //     "Access-Control-Allow-Origin": "*",
-  //     "Access-Control-Allow-Headers": "*",
-  //     "Access-Control-Allow-Methods": "*",
-  //   });
-  //   next();
-  // });
-  
+
   app.use(
     express.static("public"),
     router,
@@ -101,3 +92,67 @@ router.post("/register", bodyParser.json(), (req, res) => {
     });
   });
 
+  // Adding Products
+
+  router.post("/products", bodyParser.json(), (req, res) => {
+    const bd = req.body;
+    // bd.totalamount = bd.quantity * bd.price;
+    // Query
+    const strQry = `
+      INSERT INTO products(title, category,  product_description, img, price, quantity)
+      VALUES(?, ?, ?, ?, ?, ?);
+      `;
+    //
+    db.query(
+      strQry,
+      [
+        bd.title,
+        bd.category,
+        bd.product_description,
+        bd.img,
+        bd.price,
+        bd.quantity,
+      ],
+      (err, results) => {
+        if (err) throw err;
+        res.json({
+          msg: "Product added successfully"
+        });
+      }
+    );
+  });
+
+
+  // Call all Products
+
+  router.get("/products", (req, res) => {
+    // Query
+    const strQry = `
+      SELECT *
+      FROM products;
+      `;
+    db.query(strQry, (err, results) => {
+      if (err) throw err;
+      res.json({
+        status: 200,
+        results: results,
+      });
+    });
+  });
+
+  // Call single Project
+router.get("/products/:id", (req, res) => {
+  // Query
+  const strQry = `
+    SELECT *
+    FROM products
+    WHERE product_id = ?;
+    `;
+  db.query(strQry, [req.params.id], (err, results) => {
+    if (err) throw err;
+    res.json({
+      status: 200,
+      results: results.length <= 0 ? "Sorry, no product was found." : results,
+    });
+  });
+});
