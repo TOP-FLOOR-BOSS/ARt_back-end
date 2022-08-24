@@ -16,15 +16,15 @@ app.use(cors({
     origin: ['http://localhost:8080', 'http://127.0.0.1:8080'],
     credentials: true
   }))
-  app.use((req, res, next) => {
-    // res.setHeader("Access-Control-Allow-Origin", "*");
-    res.set({
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers": "*",
-      "Access-Control-Allow-Methods": "*",
-    });
-    next();
-  });
+  // app.use((req, res, next) => {
+  //   // res.setHeader("Access-Control-Allow-Origin", "*");
+  //   res.set({
+  //     "Access-Control-Allow-Origin": "*",
+  //     "Access-Control-Allow-Headers": "*",
+  //     "Access-Control-Allow-Methods": "*",
+  //   });
+  //   next();
+  // });
   
   app.use(
     express.static("public"),
@@ -46,7 +46,7 @@ app.use(cors({
 
 // To get the users
 router.get("/register", (req,res) => {
-  let strQry = `SELECT * FROM users`;
+  let strQry = `SELECT * FROM users;`;
   db.query(strQry, (err, results)=>{
     if (err) throw err;
     res.status(200).json({
@@ -70,10 +70,8 @@ router.post("/register", bodyParser.json(), (req, res) => {
       FROM users
       WHERE LOWER(email) = LOWER('${email}')`;
     db.query(strQry, async (err, results) => {
-      if (err) {
-        throw err;
-      } else {
-        if (results.length) {
+      if (err) throw err;
+         if (results.length) {
           res.status(409).json({ msg: "User already exist" });
         } else {
           // Encrypting a password
@@ -97,7 +95,6 @@ router.post("/register", bodyParser.json(), (req, res) => {
             }
           );
         }
-      }
     });
   });
 
