@@ -61,7 +61,7 @@ router.post("/register", bodyParser.json(), (req, res) => {
 
     let { user_name, user_lastname, email, user_password, user_role } = req.body;
 
-    if (user_role === null || user_role === undefined) {
+    if ( (user_role === null) || (user_role === undefined) || (user_role.length === 0)) {
       user_role = "user";
     }
 
@@ -73,7 +73,7 @@ router.post("/register", bodyParser.json(), (req, res) => {
         throw err;
       }else {
         console.log(results);
-        if (results) {
+        if (results.length) {
           res.status(409).json({ msg: "User already exist" });
         } else {
           // Encrypting a password
