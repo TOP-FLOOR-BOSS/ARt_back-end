@@ -206,3 +206,63 @@ router.get("/products/:id", (req, res) => {
     });
   });
 });
+
+
+// Cart Add
+app.get("/users/:id/cart", (req, res) => {
+  let sql = `SELECT cart FROM users WHERE user_id =${req.params.id}`;
+  db.query(sql, (err, results) => {
+    if (err) throw err;
+    res.json({
+      status: 200,
+      results: JSON.parse(results[0].cart),
+    });
+  });
+});
+
+
+app.post("/users/:id/cart", bodyParser.json(), (req, res) => {
+  let bd = req.body;
+  let sql = `SELECT cart FROM users WHERE user_id = ${req.params.id}`;
+  db.query(
+    sql,
+    (err, results) => {
+      if (err) throw err;
+      if (results.length > 0) {
+        let cart;
+        if (results[0].length == null) {
+          cart = [];
+        } else {
+          cart = JSON.parse(results[0].cart);
+        }
+        let product = {
+          "product_id": cart.length + 1,
+          "title": bd.title,
+          "category": bd.category,
+          "product_description": bd.product_description,
+          "img": bd.img,
+          "price": bd.price,
+          "quantity": bd.quantity,
+        };
+
+        cart.push(product);
+        let sql1 = `UPDATE users SET cart = ? WHERE user_id = ${req.params.id}`;
+
+        db.query(sql1, JSON.stringify(cart), (err, results) => {
+          if (err) throw results;
+          res.send(`Product add to your cart`);
+        });
+      } //me
+    } //you
+  );
+});
+
+// Delete
+app.delete("users/:id/cart", bodyParser.json(), (req, res) => {
+  let bd = req.body;
+  let sql = `UPDATE users SET cart = null WHERE user_id = ${req.params.id}`;
+
+  db.query(sql, (err, results) => {
+    if (err) throw errres.send("Cart is empty");
+  });
+});
