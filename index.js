@@ -11,6 +11,10 @@ const router = express.Router();
 
 const port = parseInt(process.env.PORT) || 4000;
 
+app.get('/:type', (req, res)=> {
+  res.status(404).sendFile(__dirname +'/views/404.html');
+  });
+
 app.use(
   cors({
     origin: ["http://localhost:8080", "http://127.0.0.1:8080"],
