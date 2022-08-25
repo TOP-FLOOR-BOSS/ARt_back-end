@@ -9,7 +9,7 @@ const { compare, hash } = require("bcrypt");
 const app = express();
 const router = express.Router();
 
-const port = process.env.PORT;
+const port = parseInt(process.env.PORT) || 4000;
 
 app.use(
   cors({
