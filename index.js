@@ -9,14 +9,14 @@ const { compare, hash } = require("bcrypt");
 const app = express();
 const router = express.Router();
 
-const port = process.env.Port;
+const port = process.env.PORT;
 
 app.use(
   cors({
-    origin: ["http://127.0.0.1:8081","http://localhost:8081"],
+    origin: ["http://localhost:8080", "http://127.0.0.1:8080"],
     credentials: true,
   })
-);  
+);
 
 app.use(
   express.static("public"),
