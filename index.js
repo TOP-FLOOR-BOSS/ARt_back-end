@@ -194,7 +194,7 @@ router.get("/products", (req, res) => {
   });
 });
 
-// Call single Project
+// Call single Product
 router.get("/products/:id", (req, res) => {
   // Query
   const strQry = `
@@ -224,7 +224,7 @@ app.get("/users/:id/cart", (req, res) => {
   });
 });
 
-
+//================================= Add Cart ==============================================================================
 app.post("/users/:id/cart", bodyParser.json(), (req, res) => {
   let bd = req.body;
   let sql = `SELECT cart FROM users WHERE user_id = ${req.params.id}`;
@@ -248,11 +248,11 @@ app.post("/users/:id/cart", bodyParser.json(), (req, res) => {
           "price": bd.price,
           "quantity": bd.quantity,
         };
-
+      
         cart.push(product);
-        let sql1 = `UPDATE users SET cart = ? WHERE user_id = ${req.params.id}`;
+        let sql = `UPDATE users SET cart = ? WHERE user_id = ${req.params.id}`;
 
-        db.query(sql1, JSON.stringify(cart), (err, results) => {
+        db.query(sql, JSON.stringify(cart), (err, results) => {
           if (err) throw results;
           res.send(`Product add to your cart`);
         });
@@ -261,12 +261,50 @@ app.post("/users/:id/cart", bodyParser.json(), (req, res) => {
   );
 });
 
-// Delete
-app.delete("/user /:id/cart", bodyParser.json(), (req, res) => {
-  let bd = req.body;
-  let sql = `UPDATE users SET cart = null WHERE user_id = ${req.params.id}`;
+//================================= Delete ==============================================================================
+router.delete('/users/:id/cart/:id', (req,res)=>{
+  const delSingleCartProd = `
+      SELECT cart FROM users 
+      WHERE user_id = ${req.params.id}
+  `
+  db.query(delSingleCartProd, (err,results)=>{
+      if(err) throw err;
 
-  db.query(sql, (err, results) => {
-    if (err) throw errres.send("Cart is empty");
-  });
-});
+      if(results.length > 0){
+          if(results[0].cart != null){
+
+              const result = JSON.parse(results[0].cart).filter((cart)=>{
+                  return cart.id != req.params.id;
+              })
+              result.forEach((cart,i) => {
+                  cart.id = i + 1
+              });
+              const query = `
+                  UPDATE users 
+                  SET cart = ? 
+                  WHERE user_id = ${req.params.id}
+              `
+
+              db.query(query, [JSON.stringify(result)], (err,results)=>{
+                  if(err) throw err;
+                  res.json({
+                      status:200,
+                      result: "Successfully deleted the selected item from cart"
+                  });
+              })
+
+          }else{
+              res.json({
+                  status:400,
+                  result: "Your Cart is Empty"
+              })
+          }
+      }else{
+          res.json({
+              status:400,
+              result: "There is no user with that id"
+          });
+      }
+  })
+
+})
