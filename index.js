@@ -147,6 +147,8 @@ router.patch("/login", bodyParser.json(), (req, res) => {
     }
   });
 });
+
+// Call all Products
 router.get("/products", (req, res) => {
   // Query
   const strQry = `
@@ -210,28 +212,11 @@ router.post("/products", bodyParser.json(), (req, res) => {
   );
 });
 
-// Call all Products
 
 
-// Call single Product
-router.get("/products/:id", (req, res) => {
-  // Query
-  const strQry = `
-    SELECT *
-    FROM products
-    WHERE product_id = ?;
-    `;
-  db.query(strQry, [req.params.id], (err, results) => {
-    if (err) throw err;
-    res.json({
-      status: 200,
-      results: results.length <= 0 ? "Sorry, no product was found." : results,
-    });
-  });
-});
 
 
-// Cart Add
+// Cart Get single
 app.get("/users/:id/cart", (req, res) => {
   let sql = `SELECT cart FROM users WHERE user_id =${req.params.id};`;
   db.query(sql, (err, results) => {
