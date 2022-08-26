@@ -262,14 +262,10 @@ app.post("/users/:id/cart", bodyParser.json(), (req, res) => {
 });
 
 // Delete
-app.delete("/register/:id/cart", bodyParser.json(), (req, res) => {
+app.delete("/user /:id/cart", bodyParser.json(), (req, res) => {
   let bd = req.body;
-  let sql = `    
-  DELETE FROM users 
-  WHERE id = ?;
-  `
-  `;`;
-${req.params.id}
+  let sql = `UPDATE users SET cart = null WHERE user_id = ${req.params.id}`;
+
   db.query(sql, (err, results) => {
     if (err) throw errres.send("Cart is empty");
   });
