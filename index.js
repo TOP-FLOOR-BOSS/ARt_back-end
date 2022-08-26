@@ -11,10 +11,6 @@ const router = express.Router();
 
 const port = parseInt(process.env.PORT) || 4000;
 
-app.get('/:type', (req, res)=> {
-  res.status(404).sendFile(__dirname +'/views/404.html');
-  });
-
 app.use(
   cors({
     origin: ["http://localhost:8080", "http://127.0.0.1:8080"],
@@ -35,11 +31,15 @@ app.use(
     extended: true,
   })
 );
-
 //
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+//
+app.get('/:type', (req, res)=> {
+  res.status(404).sendFile(__dirname +'/views/404.html');
+});
+
 // home
 router.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "index.html"));
@@ -147,8 +147,21 @@ router.post("/login", bodyParser.json(), (req, res) => {
     }
   });
 });
+router.get("/products", (req, res) => {
+  // Query
+  const strQry = `
+      SELECT *
+      FROM products;
+      `;
+  db.query(strQry, (err, results) => {
+    if (err) throw err;
+    res.json({
+      status: 200,
+      results: results,
+    });
+  });
+});
 // Adding Products
-
 router.post("/products", bodyParser.json(), (req, res) => {
   const bd = req.body;
   // bd.totalamount = bd.quantity * bd.price;
@@ -179,20 +192,6 @@ router.post("/products", bodyParser.json(), (req, res) => {
 
 // Call all Products
 
-router.get("/products", (req, res) => {
-  // Query
-  const strQry = `
-      SELECT *
-      FROM products;
-      `;
-  db.query(strQry, (err, results) => {
-    if (err) throw err;
-    res.json({
-      status: 200,
-      results: results,
-    });
-  });
-});
 
 // Call single Product
 router.get("/products/:id", (req, res) => {
@@ -214,7 +213,7 @@ router.get("/products/:id", (req, res) => {
 
 // Cart Add
 app.get("/users/:id/cart", (req, res) => {
-  let sql = `SELECT cart FROM users WHERE user_id =${req.params.id}`;
+  let sql = `SELECT cart FROM users WHERE user_id =${req.params.id};`;
   db.query(sql, (err, results) => {
     if (err) throw err;
     res.json({
