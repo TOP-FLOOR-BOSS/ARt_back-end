@@ -161,6 +161,26 @@ router.get("/products", (req, res) => {
     });
   });
 });
+// GEtting Single Products
+
+router.get("/products/:id", (req, res) => {
+  // Query
+  const strQry = `
+    SELECT *
+    FROM products
+    WHERE product_id = ?;
+    `;
+  db.query(strQry, [req.params.id], (err, results) => {
+    if (err) throw err;
+    res.json({
+      status: 200,
+      results: results.length <= 0 ? "Sorry, no product was found." : results,
+    });
+  });
+});
+
+
+
 // Adding Products
 router.post("/products", bodyParser.json(), (req, res) => {
   const bd = req.body;
