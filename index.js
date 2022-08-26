@@ -213,7 +213,17 @@ router.post("/products", bodyParser.json(), (req, res) => {
 });
 
 
-
+//Get Cart
+app.get("/users/cart", (req, res) => {
+  let sql = `SELECT cart FROM users =${req.params.id};`;
+  db.query(sql, (err, results) => {
+    if (err) throw err;
+    res.json({
+      status: 200,
+      results: JSON.parse(results[0].cart),
+    });
+  });
+});
 
 
 // Cart Get single
