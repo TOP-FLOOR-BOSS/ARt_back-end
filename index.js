@@ -46,7 +46,7 @@ router.get("/", (req, res) => {
 });
 
 // To get the users
-router.get("/register", (req, res) => {
+router.get("/users", (req, res) => {
   let strQry = `SELECT * FROM users;`;
   db.query(strQry, (err, results) => {
     if (err) throw err;
