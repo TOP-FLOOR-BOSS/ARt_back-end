@@ -99,7 +99,7 @@ router.post("/register", bodyParser.json(), (req, res) => {
 });
 // Login
 
-router.post("/login", bodyParser.json(), (req, res) => {
+router.patch("/login", bodyParser.json(), (req, res) => {
   const { email, user_password } = req.body;
 
   const strQry = `
