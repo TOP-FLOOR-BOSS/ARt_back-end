@@ -56,6 +56,21 @@ router.get("/users", (req, res) => {
   });
 });
 
+// Select user with specific Id
+router.get("/users/:id", (req, res) => {
+  let strQry = 
+  `SELECT user_name, user_lastname, email 
+  FROM users
+  WHERE user_id = ${req.params.id};
+  `;
+  db.query(strQry, (err, results) => {
+    if (err) throw err;
+    res.status(200).json({
+    results: results.length <= 0 ? "Sorry, this user doesnt exist." : results,
+    });
+  });
+});
+
 // Register
 router.post("/register", bodyParser.json(), (req, res) => {
   let { user_name, user_lastname, email, user_password, user_role } = req.body;
