@@ -252,8 +252,8 @@ app.post("/users/:id/cart", bodyParser.json(), (req, res) => {
     (err, results) => {
       if (err) throw err;
       if (results.length > 0) {
-        let cart;
-        if (results[0].length == null) {
+        let cart = JSON.parse(results[0].cart);
+        if (results.length == null) {
           cart = [];
         } else {
           cart = JSON.parse(results[0].cart);
@@ -267,13 +267,15 @@ app.post("/users/:id/cart", bodyParser.json(), (req, res) => {
           "price": bd.price,
           "quantity": bd.quantity,
         };
-      
+        
+        console.log(JSON.parse(results[0].cart));
         cart.push(product);
         let sql = `UPDATE users SET cart = ? WHERE user_id = ${req.params.id}`;
 
         db.query(sql, JSON.stringify(cart), (err, results) => {
-          if (err) throw results;
-          res.send(`Product add to your cart`);
+          if (err) throw err;
+          res.json(
+            {msg : `Product add to your cart`});
         });
       } //me
     } //you
