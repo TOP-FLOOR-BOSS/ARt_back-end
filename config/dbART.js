@@ -10,7 +10,6 @@ const con = createPool ({
     port: process.env.dbPort,
     database: process.env.dbName,
     multipleStatements: true,
-    connectionLimit: 50,
 });
 
 module.exports = con
