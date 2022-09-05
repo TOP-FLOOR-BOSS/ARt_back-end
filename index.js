@@ -71,6 +71,36 @@ router.get("/users/:id", (req, res) => {
   });
 });
 
+router.put("/users/:id", bodyParser.json(), (req, res) => {
+  const bd = req.body;
+  // Query
+  const strQry = `UPDATE users
+     SET  user_name = ?, user_lastname = ?, email = ?,  user_password = ?, user_role = ?
+     WHERE user_id = ${req.params.id}`;
+
+  db.query(strQry, [
+    bd.user_name,
+    bd.user_lastname,
+    bd.email,
+    bd.user_password,
+    bd.user_role], (err, data) => {
+    if (err) throw err;
+    res.send(`number of affected record/s: ${data.affectedRows}`);
+  });
+});
+
+router.delete("/users/:id", (req, res) => {
+  // Query
+  const strQry = `
+    DELETE FROM users 
+    WHERE user_id = ?;
+    `;
+  db.query(strQry, [req.params.id], (err, data, fields) => {
+    if (err) throw err;
+    res.send(`${data.affectedRows} row was affected`);
+  });
+});
+
 // Register
 router.post("/register", bodyParser.json(), (req, res) => {
   let { user_name, user_lastname, email, user_password, user_role } = req.body;
@@ -226,10 +256,39 @@ router.post("/products", bodyParser.json(), (req, res) => {
     }
   );
 });
+// Product Updte
+router.put("/products/:id", (req, res) => {
+  const bd = req.body;
+  // Query
+  const strQry = `UPDATE products
+     SET title = ? , category= ?, product_description = ?, img = ?,  price = ?, quantity = ?
+     WHERE product_id = ${req.params.id}`;
 
+  db.query(strQry, [
+    bd.title,
+    bd.category,
+    bd.product_description,
+    bd.img,
+    bd.price,
+    bd.quantity], (err, data) => {
+    if (err) throw err;
+    res.send(`number of affected record/s: ${data.affectedRows}`);
+  });
+});
 
+//  Product Delete
 
-
+router.delete("/products/:id", (req, res) => {
+  // Query
+  const strQry = `
+    DELETE FROM products 
+    WHERE product_id = ?;
+    `;
+  db.query(strQry, [req.params.id], (err, data, fields) => {
+    if (err) throw err;
+    res.send(`${data.affectedRows} row was affected`);
+  });
+});
 
 // Cart Get single
 app.get("/users/:id/cart", (req, res) => {
