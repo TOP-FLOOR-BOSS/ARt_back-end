@@ -253,7 +253,7 @@ app.post("/users/:id/cart", bodyParser.json(), (req, res) => {
       if (err) throw err;
       if (results.length > 0) {
         let cart = JSON.parse(results[0].cart);
-        if (results.length == null) {
+        if (results.cart == null) {
           cart = [];
         } else {
           cart = JSON.parse(results[0].cart);
