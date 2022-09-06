@@ -272,7 +272,9 @@ router.put("/products/:id",bodyParser.json(), (req, res) => {
     bd.price,
     bd.quantity], (err, data) => {
     if (err) throw err;
-    res.send(`number of affected record/s: ${data.affectedRows}`);
+    res.json({
+      msg:`number of affected record/s: ${data.affectedRows}`
+    });
   });
 });
 
