@@ -257,7 +257,7 @@ router.post("/products", bodyParser.json(), (req, res) => {
   );
 });
 // Product Updte
-router.put("/products/:id", (req, res) => {
+router.put("/products/:id",bodyParser.json(), (req, res) => {
   const bd = req.body;
   // Query
   const strQry = `UPDATE products
@@ -272,7 +272,7 @@ router.put("/products/:id", (req, res) => {
     bd.price,
     bd.quantity], (err, data) => {
     if (err) throw err;
-    // res.send(`number of affected record/s: ${data.affectedRows}`);
+    res.send(`number of affected record/s: ${data.affectedRows}`);
   });
 });
 
