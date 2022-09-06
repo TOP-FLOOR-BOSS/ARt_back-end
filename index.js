@@ -271,6 +271,8 @@ router.put("/products/:id",bodyParser.json(), (req, res) => {
     bd.img,
     bd.price,
     bd.quantity], (err, data) => {
+
+
     if (err) throw err;
     res.json({
       msg:`number of affected record/s: ${data.affectedRows}`
@@ -288,7 +290,7 @@ router.delete("/products/:id", (req, res) => {
     `;
   db.query(strQry, [req.params.id], (err, data, fields) => {
     if (err) throw err;
-    res.send(`${data.affectedRows} row was affected`);
+    res.json({ msg: `${data.affectedRows} row was affected`});
   });
 });
 
