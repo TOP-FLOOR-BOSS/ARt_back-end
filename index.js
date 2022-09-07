@@ -87,7 +87,9 @@ router.put("/users/:id", bodyParser.json(), (req, res) => {
     bd.user_password,
     bd.user_role], (err, data) => {
     if (err) throw err;
-    res.send(`number of affected record/s: ${data.affectedRows}`);
+    res.json({
+      msg:`Edit succesful`
+    });
   });
 });
 
