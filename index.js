@@ -295,7 +295,7 @@ router.delete("/products/:id", (req, res) => {
 });
 
 // Cart Get single
-app.get("/users/:id/cart", (req, res) => {
+app.get("/users/:id/cart", bodyParser.json() ,(req, res) => {
   let sql = `SELECT cart FROM users WHERE user_id =${req.params.id};`;
   db.query(sql, (err, results) => {
     if (err) throw err;
