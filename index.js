@@ -297,7 +297,7 @@ router.delete("/products/:id", (req, res) => {
 });
 
 // Cart Get single
-app.get("/users/:id/cart", bodyParser.json() ,(req, res) => {
+router.get("/users/:id/cart", bodyParser.json() ,(req, res) => {
   let sql = `SELECT cart FROM users WHERE user_id =${req.params.id};`;
   db.query(sql, (err, results) => {
     if (err) throw err;
@@ -309,7 +309,7 @@ app.get("/users/:id/cart", bodyParser.json() ,(req, res) => {
 });
 
 //================================= Add Cart ==============================================================================
-app.post("/users/:id/cart", bodyParser.json(), (req, res) => {
+router.post("/users/:id/cart", bodyParser.json(), (req, res) => {
   let bd = req.body;
   let sql = `SELECT cart FROM users WHERE user_id = ${req.params.id}`;
   db.query(
