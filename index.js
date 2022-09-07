@@ -71,6 +71,8 @@ router.get("/users/:id", (req, res) => {
   });
 });
 
+
+// Update and Delete Users
 router.put("/users/:id", bodyParser.json(), (req, res) => {
   const bd = req.body;
   // Query
