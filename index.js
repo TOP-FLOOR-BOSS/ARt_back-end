@@ -91,7 +91,7 @@ router.put("/users/:id", bodyParser.json(), (req, res) => {
   });
 });
 
-router.delete("/users/:id", (req, res) => {
+router.delete("/users/:id", bodyParser.json(),  (req, res) => {
   // Query
   const strQry = `
     DELETE FROM users 
