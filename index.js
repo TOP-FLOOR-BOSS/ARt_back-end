@@ -99,7 +99,9 @@ router.delete("/users/:id", bodyParser.json(),  (req, res) => {
     `;
   db.query(strQry, [req.params.id], (err, data, fields) => {
     if (err) throw err;
-    res.send(`${data.affectedRows} row was affected`);
+    res.json({
+      msg:`Deleted`
+    });
   });
 });
 
