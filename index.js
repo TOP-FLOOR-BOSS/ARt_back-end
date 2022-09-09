@@ -380,10 +380,8 @@ router.delete('/users/:id/cart/:cartid', (req,res)=>{
 
               db.query(query, [JSON.stringify(result)], (err,results)=>{
                   if(err) throw err;
-                  res.json({
-                      status:200,
-                      result: "Successfully deleted the selected item from cart"
-                  });
+                  res.json(
+                    {msg : `Product Deleted from your cart`});
               })
 
           }else{
