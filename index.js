@@ -59,7 +59,7 @@ router.get("/users", (req, res) => {
 // Select user with specific Id
 router.get("/users/:id", (req, res) => {
   let strQry = 
-  `SELECT user_name, user_lastname, email 
+  `SELECT *
   FROM users
   WHERE user_id = ${req.params.id};
   `;
@@ -320,16 +320,18 @@ router.post("/users/:id/cart", bodyParser.json(), (req, res) => {
     sql,
     (err, results) => {
       if (err) throw err;
+      let cart
       if (results.length > 0) {
-        let cart = JSON.parse(results[0].cart);
-        if (results.cart == null) {
+        // let cart = JSON.parse(results[0].cart);
+        if (results.cart === null) {
           cart = [];
         } else {
           cart = JSON.parse(results[0].cart);
         }
+        
         let product = {
           cart_id : cart.length + 1,
-          // "product_id": cart.length + 1,
+          "product_id": cart.length + 1,
           "title": bd.title,
           "category": bd.category,
           "product_description": bd.product_description,
@@ -338,7 +340,7 @@ router.post("/users/:id/cart", bodyParser.json(), (req, res) => {
           "quantity": bd.quantity,
         };
         
-        console.log(JSON.parse(results[0].cart));
+        // console.log(JSON.parse(results[0].cart));
         cart.push(product);
         let sql = `UPDATE users SET cart = ? WHERE user_id = ${req.params.id}`;
 
