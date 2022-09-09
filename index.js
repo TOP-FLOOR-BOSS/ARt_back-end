@@ -296,7 +296,7 @@ router.delete("/products/:id", (req, res) => {
     `;
   db.query(strQry, [req.params.id], (err, data, fields) => {
     if (err) throw err;
-    res.json({ msg: `${data.affectedRows} row was affected`});
+    res.status(200).json({ msg: `Item has successfuly been deleted`});
   });
 });
 
